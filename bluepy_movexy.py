@@ -18,21 +18,21 @@ def buildCmdXY(stepsX, stepsY, speedX, speedY):
     commandCode = 3
 
     # Convert steps for x/y into hexadecimal.
-    # This tells the motor how many steps to move
+    # This tells the motor how many steps to move, 4 bytes each.
     hexStepsX = ''.join(format(x, '02x') for x in (stepsX & (2**32-1)).to_bytes(4, byteorder='big'))
     hexStepsY = ''.join(format(x, '02x') for x in (stepsy & (2**32-1)).to_bytes(4, byteorder='big'))
     # Convert speed for x/y into hexadecimal (only positive values)
-    # Speed is in steps per second
+    # Speed is in steps per second, 2 bytes each. 
     hexSpeedX = '{:04x}'.format(speedX)
     hexSpeedY = '{:04x}'.format(speedY)
 
     # Create payload and header
-    # Payload is command specific
-    payload = "{}{}00".format(hexSteps, hexSpeed)
+    # Payload is command specific, the final byte here is reserved. 
+    payload = "{}{}{}{}00".format(hexStepsX, hexStepsY, hexSpeedX, hexSpeedY)
     # Header is three bytes and has the format: 0xFE, length of payload, command code. 
     header = "FE{}{}".format(format(len(payload), '02x'), format(commandCode, '02x'))
 
-    cmd = payload + header;
+    cmd = payload + header
     
     # Convert to binary and calc CRC checksum
     data = binascii.a2b_hex(cmd)
