@@ -2,6 +2,10 @@
 
 This sample project shows how to control an Orbit360 using python. 
 
+## Requirements
+
+This sample runs on python 3.6 and needs the `bluepy` library to function properly. 
+
 ## What does it do?
 
 The example script sends a movement command to the Orbit360 using the `bluepy`. 
